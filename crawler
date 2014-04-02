@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift(File.expand_path(File.join(__FILE__, '../lib')))
+
+require 'optparse'
+require 'crawler'
+require 'crawler/result_handler'
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: crawler [options]'
+
+  opts.on('-u', '--url STRING', String, 'Base URL to fetch') do |u|
+    options[:base_url] = u
+  end
+
+  opts.on('-c', '--concurrency INTEGER', Integer, 'Number of concurrent crawling threads. Default: 4') do |c|
+    options[:max_threads] = c
+  end
+
+  opts.on('-p', '--pages INTEGER', Integer, 'Max number of pages to fetch. Default: 50') do |p|
+    options[:max_pages] = p
+  end
+
+  opts.on('-d', '--depth INTEGER', Integer, 'Max page depth relative to base url. Default: 3') do |d|
+    options[:max_depth] = d
+  end
+
+  opts.on('-h', '--help', 'Display this help') do
+    puts opts
+    exit
+  end
+end.parse!
+
+puts 'Options:'
+puts options.inspect
+
+Crawler::ResultHandler.new(
+  Crawler.crawl(options[:base_url], options[:max_threads], options[:max_depth], options[:max_pages])
+).print
