@@ -1,22 +1,22 @@
 require 'spec_helper'
-require 'page'
+require 'crawler/page'
 require 'rest_client'
 
-describe Page do
-  let(:googlecom_source) { File.open(File.expand_path('../../support/google.com.html', __FILE__)).read }
+describe Crawler::Page do
+  let(:googlecom_source) { File.open(File.expand_path('../../../support/google.com.html', __FILE__)).read }
 
   describe "#initialize" do
     it "should assign url" do
-      expect(Page.new('http://google.com', 0).url).to eq('http://google.com')
+      expect(Crawler::Page.new('http://google.com', 0).url).to eq('http://google.com')
     end
 
     it "should assign depth" do
-      expect(Page.new('http://google.com', 0).depth).to eq(0)
+      expect(Crawler::Page.new('http://google.com', 0).depth).to eq(0)
     end
   end
 
   describe "#fetch" do
-    let(:page) { Page.new('http://google.com', 0) }
+    let(:page) { Crawler::Page.new('http://google.com', 0) }
 
     before { allow(RestClient).to receive(:get) { googlecom_source } }
 
@@ -43,7 +43,7 @@ describe Page do
   end
 
   describe "#child_urls" do
-    let(:page) { Page.new('http://google.com', 0) }
+    let(:page) { Crawler::Page.new('http://google.com', 0) }
 
     before do
       allow(RestClient).to receive(:get) { googlecom_source }
@@ -56,7 +56,7 @@ describe Page do
   end
 
   describe "#info" do
-    let(:page) { Page.new('http://google.com', 0) }
+    let(:page) { Crawler::Page.new('http://google.com', 0) }
 
     before do
       allow(RestClient).to receive(:get) { googlecom_source }
