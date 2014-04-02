@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'rest_client'
 
 module Crawler
   class Page
