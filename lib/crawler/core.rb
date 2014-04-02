@@ -21,7 +21,7 @@ module Crawler
 
       crawled_pages = 0
 
-      url_queue.push({ :url => base_url, :depth => 1 })
+      url_queue.push(:url => base_url, :depth => 1)
 
       MAX_THREADS.times do
         worker = Thread.new { Worker.new(url_queue, page_queue).perform }
@@ -40,13 +40,11 @@ module Crawler
 
         page_results << page.info
         if should_go_deeper?(page.depth)
-          page.child_urls.each { |child| url_queue.push({ :url => child, :depth => (page.depth + 1) }) }
+          page.child_urls.each { |child| url_queue.push(:url => child, :depth => (page.depth + 1)) }
         end
 
         if page_queue.empty? && url_queue.empty?
-          until url_queue.num_waiting == workers.size
-            Thread.pass
-          end
+          Thread.pass until url_queue.num_waiting == workers.size
           if page_queue.empty?
             workers.size.times { url_queue.push(:end) }
             break

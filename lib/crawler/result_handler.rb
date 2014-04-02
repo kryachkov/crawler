@@ -7,22 +7,22 @@ module Crawler
     end
 
     def converted_result_hash
-      raw_results.inject({}) do |a, page|
+      raw_results.reduce({}) do |a, page|
         a[page[:url]] = count_inputs_for(page)
         a
       end
     end
 
     def print
-      converted_result_hash.each { |url, count| puts "#{ url } - #{ count } input(s)"}
+      converted_result_hash.each { |url, count| puts "#{ url } - #{ count } inputs" }
     end
 
     private
 
     def count_inputs_for(page)
       raw_results
-        .select { |e| page[:child_urls].include?(e[:url])}
-        .inject(page[:input_count]) { |a, child_page| a += child_page[:input_count] }
+        .select { |e| page[:child_urls].include?(e[:url]) }
+        .reduce(page[:input_count]) { |a, e| a + e[:input_count] }
     end
   end
 end

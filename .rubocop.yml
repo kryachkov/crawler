@@ -1,0 +1,27 @@
+AllCops:
+  Exclude:
+    - sample_app/
+HashSyntax:
+  Enabled: false
+
+LineLength:
+  Max: 120
+  Exclude:
+    - spec/lib/crawler/result_handler_spec.rb
+    - sample_app/config/initializers/secret_token.rb
+
+StringLiterals:
+  Enabled: false
+
+SpaceInsideHashLiteralBraces:
+  Enabled: true
+  Exclude:
+    - spec/lib/crawler/result_handler_spec.rb
+
+SpaceAroundOperators:
+  Enabled: true
+  Exclude:
+    - spec/lib/crawler/result_handler_spec.rb
+
+Documentation:
+  Enabled: false

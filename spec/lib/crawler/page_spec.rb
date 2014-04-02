@@ -64,12 +64,12 @@ describe Crawler::Page do
     end
 
     it "should return hash of info" do
-      expect(page.info).to eq({
+      expect(page.info).to eq(
         :url => 'http://google.com',
         :depth => 0,
         :child_urls => %w(http://google.com/maps /drive),
         :input_count => 2
-      })
+      )
     end
   end
 end

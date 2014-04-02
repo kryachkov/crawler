@@ -39,7 +39,7 @@ describe Crawler::ResultHandler do
     before { allow(result_handler).to receive(:converted_result_hash) { { 'http://google.com' => 5 } } }
 
     it "should call puts for each converted_result_hash item" do
-      expect(result_handler).to receive(:puts).with('http://google.com - 5 input(s)')
+      expect(result_handler).to receive(:puts).with('http://google.com - 5 inputs')
       result_handler.print
     end
   end
