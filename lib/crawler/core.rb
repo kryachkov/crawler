@@ -6,10 +6,14 @@ module Crawler
     MAX_DEPTH = 3
     MAX_PAGES = 50
 
-    attr_reader :base_url
+    attr_reader :base_url, :opts
 
-    def initialize(base_url)
+    def initialize(base_url, threads = nil, depth = nil, pages = nil)
       @base_url = base_url
+      @opts = {}
+      @opts[:max_threads] = (threads || MAX_THREADS)
+      @opts[:max_depth] = (depth || MAX_DEPTH)
+      @opts[:max_pages] = (pages || MAX_PAGES)
     end
 
     def crawl
@@ -23,7 +27,7 @@ module Crawler
 
       url_queue.push(:url => base_url, :depth => 1)
 
-      MAX_THREADS.times do
+      opts[:max_threads].times do
         worker = Thread.new { Worker.new(url_queue, page_queue).perform }
         worker.abort_on_exception = true
         workers << worker
@@ -33,7 +37,7 @@ module Crawler
         page = page_queue.pop
         crawled_pages += 1
 
-        if crawled_pages > MAX_PAGES
+        if crawled_pages > opts[:max_pages]
           workers.each(&:terminate)
           break
         end
@@ -60,7 +64,7 @@ module Crawler
     private
 
     def should_go_deeper?(depth)
-      depth < MAX_DEPTH
+      depth < opts[:max_depth]
     end
   end
 end
